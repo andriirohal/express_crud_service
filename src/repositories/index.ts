@@ -1,1 +1,1 @@
-export { createProduct, getProducts, getProductById } from "./productRepository";
+export { createProduct, getAllProducts, getProductById, deleteProduct } from "./productRepository";

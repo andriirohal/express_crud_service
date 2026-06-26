@@ -3,9 +3,11 @@ import { randomUUID } from "crypto";
 import { Product, Result, ProductInput } from "../types";
 import { writeProducts, readProducts } from "../repositories";
 
-const findById = (products: Product[], id: string): Product | undefined => {
-  return products.find((p) => p.id === id);
-}; 
+const findById = (products: Product[], id: string): Product | undefined => 
+  products.find((p) => p.id === id); 
+
+const findIndexById = (products: Product[], id: string) => 
+  products.findIndex((p) => p.id === id);
 
 const isValidPrice = (n: unknown): n is number => 
   typeof n === "number" && Number.isFinite(n) && n >= 0;
@@ -65,7 +67,6 @@ export async function createProduct(data: ProductInput): Promise<Result<Product>
   };
 
   products.push(newProduct);
-
   await writeProducts(products);
 
   return {
@@ -76,7 +77,7 @@ export async function createProduct(data: ProductInput): Promise<Result<Product>
 
 export async function deleteProduct(id: string): Promise<Result<Product>> {
   const products = await readProducts();
-  const index = products.findIndex((p) => p.id === id);
+  const index = findIndexById(products, id);
 
   if(index === -1) {
     return {
@@ -96,7 +97,7 @@ export async function deleteProduct(id: string): Promise<Result<Product>> {
 
 export async function updateProduct(id: string, data: Partial<ProductInput>): Promise<Result<Product>> {
   const products = await readProducts();
-  const index = products.findIndex((p) => p.id === id);
+  const index = findIndexById(products, id);
 
   if(index === -1) {
     return {

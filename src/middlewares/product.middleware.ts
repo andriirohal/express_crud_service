@@ -7,7 +7,8 @@ export const validateId = (req: Request<{id: string}>, res: Response, next: Next
   if(!isUuid(id)) {
     return res.status(400).json({
       success: false,
-      error: "Invalid product ID"
+      error: "Invalid product ID",
+      status: 400
     });
   };
 
@@ -19,6 +20,7 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
 
   return res.status(500).json({
     success: false,
-    error: "Internal server error"
+    error: "Internal server error",
+    status: 500
   });
 };

@@ -5,7 +5,7 @@ import { createProductController, getAllProductsController, getProductByIdContro
 import { validateId } from "../middlewares";
 
 router.get("/", getAllProductsController);
-router.get("/:id", validateId, getProductByIdController);
-router.delete("/:id", validateId, deleteProductController);
-router.patch("/:id", validateId, updateProductController);
 router.post("/", createProductController);
+router.get("/:id", validateId, getProductByIdController);
+router.patch("/:id", validateId, updateProductController);
+router.delete("/:id", validateId, deleteProductController);

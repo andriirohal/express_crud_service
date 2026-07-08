@@ -1,16 +1,14 @@
-import { randomUUID } from "crypto";
-
 import { Product, ProductInput, Result } from "../types";
 import { pool } from "../config";
 
-const isValidPrice = (n: unknown): n is number => 
-  typeof n === "number" && Number.isFinite(n) && n >= 0;
+const isValidPrice = (price: unknown): price is number => 
+  typeof price === "number" && Number.isFinite(price) && price >= 0;
 
-const isValidStock = (n: unknown): n is number => 
-  typeof n === "number" && Number.isInteger(n) && n >= 0;
+const isValidStock = (stock: unknown): stock is number => 
+  typeof stock === "number" && Number.isInteger(stock) && stock >= 0;
 
-const isValidName = (s: unknown): s is string => 
-  typeof s === "string" && s.trim().length > 0;
+const isValidName = (name: unknown): name is string => 
+  typeof name === "string" && name.trim().length > 0;
 
 export async function getProductById(id: string): Promise<Result<Product>> {
   const result = await pool.query("SELECT * FROM products WHERE id = $1", 
@@ -20,13 +18,15 @@ export async function getProductById(id: string): Promise<Result<Product>> {
   if(!result.rows[0]) {
     return {
       success: false,
-      error: "Product not found"
+      error: "Product not found",
+      status: 404
     };
   };
 
   return {
     success: true,
-    data: result.rows[0]
+    data: result.rows[0],
+    status: 200
   };
 };
 
@@ -34,38 +34,35 @@ export async function createProduct(product: ProductInput): Promise<Result<Produ
   if(!isValidName(product.name)) {
     return {
       success: false,
-      error: "Invalid product name"
+      error: "Invalid product name",
+      status: 400
     };
   };
   
   if(!isValidPrice(product.price)) {
     return {
       success: false,
-      error: "Invalid product price"
+      error: "Invalid product price",
+      status: 400
     };
   };
   
   if(!isValidStock(product.stock)) {
     return {
       success: false,
-      error: "Invalid product stock"
+      error: "Invalid product stock",
+      status: 400
     };
   };
   
-  const newProduct: Product = {
-    id: randomUUID(),
-    name: product.name.trim(),
-    price: product.price,
-    stock: product.stock
-  };
-
-  const result = await pool.query("INSERT INTO products (id, name, price, stock) VALUES ($1, $2, $3, $4) RETURNING *",
-    [newProduct.id, newProduct.name, newProduct.price, newProduct.stock]
+  const result = await pool.query("INSERT INTO products (name, price, stock) VALUES ($1, $2, $3) RETURNING *",
+    [product.name.trim(), product.price, product.stock]
   );
 
   return {
     success: true,
-    data: result.rows[0]
+    data: result.rows[0],
+    status: 201
   };
 };
 
@@ -77,13 +74,15 @@ export async function deleteProduct(id: string): Promise<Result<Product>> {
   if(!result.rows[0]) {
     return {
       success: false,
-      error: "Product not found"
+      error: "Product not found",
+      status: 404
     };
   };
 
   return {
     success: true,
-    data: result.rows[0]
+    data: result.rows[0],
+    status: 200
   };
 };
 
@@ -93,21 +92,24 @@ export async function updateProduct(id: string, product: Partial<ProductInput>):
   if(product.name != null && !isValidName(trimmedName)) {
     return {
       success: false,
-      error: "Invalid product name"
+      error: "Invalid product name",
+      status: 400
     };
   };
 
   if(product.price != null && !isValidPrice(product.price)) {
     return {
       success: false,
-      error: "Invalid product price"
+      error: "Invalid product price",
+      status: 400
     };
   };
 
   if(product.stock != null && !isValidStock(product.stock)) {
     return {
       success: false,
-      error: "Invalid product stock"
+      error: "Invalid product stock",
+      status: 400
     };
   };
 
@@ -118,13 +120,15 @@ export async function updateProduct(id: string, product: Partial<ProductInput>):
   if(!result.rows[0]) {
     return {
       success: false,
-      error: "Product not found"
+      error: "Product not found",
+      status: 404
     };
   };
 
   return {
     success: true,
-    data: result.rows[0]
+    data: result.rows[0],
+    status: 200
   };
 };
 
@@ -133,6 +137,7 @@ export async function getAllProducts(): Promise<Result<Product[]>> {
   
   return {
     success: true,
-    data: result.rows
+    data: result.rows,
+    status: 200
   };
 };

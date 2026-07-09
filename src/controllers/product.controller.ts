@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct } from "../core";
+import { createProduct, getAllProducts, getProductById, deleteProduct, updateProduct } from "../services";
 
 export const getProductByIdController = async (req: Request<{id: string}>, res: Response, next: NextFunction) => {
   try {

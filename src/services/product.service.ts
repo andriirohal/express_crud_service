@@ -1,5 +1,3 @@
-import { performance } from "node:perf_hooks";
-
 import { Product, ProductInput, Result } from "../types";
 import { pool } from "../config";
 
@@ -37,13 +35,9 @@ export async function createProduct(product: ProductInput): Promise<Result<Produ
     };
   };
 
-  const start = performance.now();
-
   const result = await pool.query("INSERT INTO products (name, price, stock) VALUES ($1, $2, $3) RETURNING *",
     [product.name.trim(), product.price, product.stock]
   );
-
-  console.log(`createProduct took ${(performance.now() - start).toFixed(2)}ms`);
 
   return {
     success: true,
@@ -53,13 +47,9 @@ export async function createProduct(product: ProductInput): Promise<Result<Produ
 };
 
 export async function deleteProduct(id: string): Promise<Result<Product>> {
-  const start = performance.now();
-
   const result = await pool.query("DELETE FROM products WHERE id = $1 RETURNING *",
     [id]
   );
-
-  console.log(`deleteProduct took ${(performance.now() - start).toFixed(2)}ms`);
 
   const product = result.rows[0];
 
@@ -79,13 +69,9 @@ export async function deleteProduct(id: string): Promise<Result<Product>> {
 };
 
 export async function getProductById(id: string): Promise<Result<Product>> {
-  const start = performance.now();
-
   const result = await pool.query("SELECT * FROM products WHERE id = $1",
     [id]
   );
-
-  console.log(`getProductById took ${(performance.now() - start).toFixed(2)}ms`);
 
   const product = result.rows[0];
 
@@ -131,13 +117,9 @@ export async function updateProduct(id: string, product: Partial<ProductInput>):
     };
   };
 
-  const start = performance.now();
-
   const result = await pool.query("UPDATE products SET name = COALESCE($2, name), price = COALESCE($3, price), stock = COALESCE($4, stock) WHERE id = $1 RETURNING *",
     [id, trimmedName, product.price, product.stock]
   );
-
-  console.log(`updateProduct took ${(performance.now() - start).toFixed(2)}ms`);
 
   const updatedProduct = result.rows[0];
 
@@ -157,13 +139,9 @@ export async function updateProduct(id: string, product: Partial<ProductInput>):
 };
 
 export async function getAllProducts(limit = 10, offset = 0): Promise<Result<Product[]>> {
-  const start = performance.now();
-
   const result = await pool.query("SELECT * FROM products ORDER BY name LIMIT $1 OFFSET $2",
     [limit, offset]
   );
-
-  console.log(`getAllProducts took ${(performance.now() - start).toFixed(2)}ms`);
 
   return {
     success: true,

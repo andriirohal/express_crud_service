@@ -31,8 +31,7 @@ A REST API built with Node.js, Express, and TypeScript, featuring a clean layere
 ```txt
 src/
 ├── config/        
-├── controllers/
-├── core/     
+├── controllers/     
 ├── middlewares/      
 ├── routes/          
 ├── services/          

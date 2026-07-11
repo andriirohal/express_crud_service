@@ -1,5 +1,5 @@
 {
-  "name": "express_pg_service",
+  "name": "express_crud_service",
   "version": "1.0.0",
   "main": "dist/server.js",
   "type": "commonjs",

@@ -1,11 +1,11 @@
 import { Router } from "express";
 export const router = Router();
 
-import { createProductController, getAllProductsController, getProductByIdController, deleteProductController, updateProductController } from "../controllers";
+import * as controllers from "../controllers";
 import { validateId } from "../middlewares";
 
-router.get("/", getAllProductsController);
-router.post("/", createProductController);
-router.get("/:id", validateId, getProductByIdController);
-router.patch("/:id", validateId, updateProductController);
-router.delete("/:id", validateId, deleteProductController);
+router.get("/", controllers.getAllProductsController);
+router.post("/", controllers.createProductController);
+router.get("/:id", validateId, controllers.getProductByIdController);
+router.patch("/:id", validateId, controllers.updateProductController);
+router.delete("/:id", validateId, controllers.deleteProductController);

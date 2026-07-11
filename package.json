@@ -1,5 +1,5 @@
 {
-  "name": "express_postgres_api",
+  "name": "express_pg_service",
   "version": "1.0.0",
   "main": "dist/server.js",
   "type": "commonjs",

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
-import { services, pool } from "..";
+import * as services from "../services";
+import { pool } from "../config";
 
 export const getProductByIdController = async (req: Request<{id: string}>, res: Response, next: NextFunction) => {
   try {

@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import { controllers, validateId } from "..";
+import * as controllers from "../controllers";
+import { validateId } from "../middlewares";
 
 export const router = Router();
 

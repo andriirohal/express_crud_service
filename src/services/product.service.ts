@@ -1,6 +1,6 @@
 import type { Pool } from "pg";
 
-import type { Product, ProductInput, Result } from "..";
+import type { Product, ProductInput, Result } from "../types";
 
 const isValidPrice = (price: unknown): price is number =>
   typeof price === "number" && Number.isFinite(price) && price >= 0;

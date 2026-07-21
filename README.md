@@ -55,16 +55,16 @@ Create the products table:
 
 ```sql
 CREATE TABLE products (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL CHECK(char_length(trim(name)) > 0),
-    price NUMERIC(10, 2) NOT NULL CHECK(price >= 0),
-    stock INTEGER NOT NULL CHECK(stock >= 0)
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL CHECK (char_length(trim(name)) > 0),
+  price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+  stock INTEGER NOT NULL CHECK (stock >= 0)
 );
 ```
 
 Install PostgreSQL driver:
 
-```bash
+```console
 npm install pg
 npm install -D @types/pg
 ```
@@ -90,12 +90,14 @@ Create a PostgreSQL connection pool:
 
 import { Pool } from "pg";
 
+const PORT = Number(process.env.PGPORT);
+
 export const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  port: Number.isFinite(PORT) ? PORT : 5432
 });
 ```
 
@@ -107,39 +109,27 @@ The `pg` package provides a connection pool used throughout the application to e
 
 Install dependencies:
 
-```bash
+```console
 npm install
 ```
 
 Start development server:
 
-```bash
+```console
 npm run dev
 ```
 
 Build the project:
 
-```bash
+```console
 npm run build
 ```
 
 Start production server:
 
-```bash
+```console
 npm start
 ```
-
----
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/products` | Get all products |
-| GET | `/products/:id` | Get product by ID |
-| POST | `/products` | Create new product |
-| PATCH | `/products/:id` | Update product by ID |
-| DELETE | `/products/:id` | Delete product by ID |
 
 ---
 
